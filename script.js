@@ -71,11 +71,11 @@ canvas.addEventListener("click", (event) => {
     } else if (x >= 50 && x <= 250 && y >= 300 && y <= 350 && score >= upgradeCost) {
         score -= upgradeCost;
         clickPower++;
-        upgradeCost *= 2;
+        upgradeCost *= 1.5; // Reduced scaling
     } else if (x >= 350 && x <= 550 && y >= 300 && y <= 350 && score >= autoClickerCost) {
         score -= autoClickerCost;
         autoClickers++;
-        autoClickerCost *= 2;
+        autoClickerCost *= 1.7; // Reduced scaling
     } else if (x >= 50 && x <= 250 && y >= 400 && y <= 450 && score >= rebirthCost) {
         rebirths++;
         score = 0;
@@ -83,10 +83,10 @@ canvas.addEventListener("click", (event) => {
         autoClickers = 0;
         upgradeCost = 10;
         autoClickerCost = 50;
-        rebirthCost *= 2;
+        rebirthCost *= 1.8; // Reduced scaling
         multiplier++;
     } else if (x >= 350 && x <= 550 && y >= 400 && y <= 450 && score >= prestigeCost) {
-        prestigeCost *= 3;
+        prestigeCost *= 2.5; // Reduced scaling
         rebirths = 0;
         multiplier *= 2;
     }
