@@ -28,14 +28,6 @@ function drawButton(text, x, y, width, height, color) {
   ctx.fillText(text, x + 10, y + 30);
 }
 
-function drawLeverButton(x, y, width, height, isOn, label) {
-  ctx.fillStyle = isOn ? "lime" : "red";
-  ctx.fillRect(x, y, width, height);
-  ctx.fillStyle = "white";
-  ctx.font = "16px Arial";
-  ctx.fillText(label, x + 10, y + 25);
-}
-
 function updateScoreDisplay() {
   scoreDisplay.innerHTML = `Score: ${score} | Click Power: ${clickPower} | Auto Clickers: ${autoClickers} | Rebirths: ${rebirths} | Multiplier: ${multiplier}x`;
 }
@@ -53,15 +45,18 @@ function checkAchievements() {
 
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawButton("Click Me!", 200, 200, 200, 50, "blue");
-  drawButton(`Upgrade Click (${Math.round(upgradeCost)})`, 50, 300, 200, 50, "green");
-  drawButton(`Buy Auto (${Math.round(autoClickerCost)})`, 350, 300, 200, 50, "orange");
-  drawButton(`Rebirth (${Math.round(rebirthCost)})`, 50, 400, 200, 50, "purple");
-  drawButton(`Prestige (${Math.round(prestigeCost)})`, 350, 400, 200, 50, "gold");
 
-  drawLeverButton(50, 500, 150, 40, autoRebirth, "Auto Rebirth");
-  drawLeverButton(210, 500, 150, 40, autoPrestige, "Auto Prestige");
-  drawLeverButton(370, 500, 150, 40, autoBuyAutoClicker, "Auto Buy Auto");
+  // Main game buttons
+  drawButton("Click Me!", 200, 100, 200, 50, "blue");
+  drawButton(`Upgrade Click (${Math.round(upgradeCost)})`, 50, 200, 200, 50, "green");
+  drawButton(`Buy Auto (${Math.round(autoClickerCost)})`, 350, 200, 200, 50, "orange");
+  drawButton(`Rebirth (${Math.round(rebirthCost)})`, 50, 300, 200, 50, "purple");
+  drawButton(`Prestige (${Math.round(prestigeCost)})`, 350, 300, 200, 50, "gold");
+
+  // Separate toggle buttons
+  drawButton(autoRebirth ? "Auto Rebirth: ON" : "Auto Rebirth: OFF", 50, 400, 200, 50, autoRebirth ? "lime" : "red");
+  drawButton(autoPrestige ? "Auto Prestige: ON" : "Auto Prestige: OFF", 350, 400, 200, 50, autoPrestige ? "lime" : "red");
+  drawButton(autoBuyAutoClicker ? "Auto Buy Auto: ON" : "Auto Buy Auto: OFF", 200, 500, 200, 50, autoBuyAutoClicker ? "lime" : "red");
 
   updateScoreDisplay();
   checkAchievements();
@@ -73,21 +68,27 @@ canvas.addEventListener("click", (event) => {
   let x = event.clientX - rect.left;
   let y = event.clientY - rect.top;
 
-  if (x >= 200 && x <= 400 && y >= 200 && y <= 250) score += clickPower * multiplier;
+  // Main Click Me button
+  if (x >= 200 && x <= 400 && y >= 100 && y <= 150) {
+    score += clickPower * multiplier;
+  }
 
-  else if (x >= 50 && x <= 250 && y >= 300 && y <= 350 && score >= upgradeCost) {
+  // Upgrade Click
+  else if (x >= 50 && x <= 250 && y >= 200 && y <= 250 && score >= upgradeCost) {
     score -= upgradeCost;
     clickPower++;
     upgradeCost = Math.round(upgradeCost * 1.5);
   }
 
-  else if (x >= 350 && x <= 550 && y >= 300 && y <= 350 && score >= autoClickerCost) {
+  // Buy Auto Clicker
+  else if (x >= 350 && x <= 550 && y >= 200 && y <= 250 && score >= autoClickerCost) {
     score -= autoClickerCost;
     autoClickers++;
     autoClickerCost = Math.round(autoClickerCost * 1.7);
   }
 
-  else if (x >= 50 && x <= 250 && y >= 400 && y <= 450 && score >= rebirthCost) {
+  // Rebirth
+  else if (x >= 50 && x <= 250 && y >= 300 && y <= 350 && score >= rebirthCost) {
     rebirths++;
     score = 0;
     clickPower = 1;
@@ -98,22 +99,33 @@ canvas.addEventListener("click", (event) => {
     multiplier++;
   }
 
-  else if (x >= 350 && x <= 550 && y >= 400 && y <= 450 && score >= prestigeCost) {
+  // Prestige
+  else if (x >= 350 && x <= 550 && y >= 300 && y <= 350 && score >= prestigeCost) {
     prestigeCost = Math.round(prestigeCost * 2.5);
     rebirths = 0;
     multiplier *= 2;
   }
 
-  else if (x >= 50 && x <= 200 && y >= 500 && y <= 540) autoRebirth = !autoRebirth;
+  // Toggle Auto Rebirth
+  else if (x >= 50 && x <= 250 && y >= 400 && y <= 450) {
+    autoRebirth = !autoRebirth;
+  }
 
-  else if (x >= 210 && x <= 360 && y >= 500 && y <= 540) autoPrestige = !autoPrestige;
+  // Toggle Auto Prestige
+  else if (x >= 350 && x <= 550 && y >= 400 && y <= 450) {
+    autoPrestige = !autoPrestige;
+  }
 
-  else if (x >= 370 && x <= 520 && y >= 500 && y <= 540) autoBuyAutoClicker = !autoBuyAutoClicker;
+  // Toggle Auto Buy Auto Clicker
+  else if (x >= 200 && x <= 400 && y >= 500 && y <= 550) {
+    autoBuyAutoClicker = !autoBuyAutoClicker;
+  }
 });
 
 setInterval(() => {
   score += autoClickers * rebirths + autoClickers;
 
+  // Auto actions
   if (autoRebirth && score >= rebirthCost) {
     rebirths++;
     score = 0;
