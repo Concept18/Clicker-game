@@ -2,7 +2,7 @@ const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
 document.body.appendChild(canvas);
 canvas.width = 600;
-canvas.height = 500;
+canvas.height = 600;
 
 document.body.style.textAlign = "center";
 document.body.style.background = "#222";
@@ -24,7 +24,7 @@ let achievements = {};
 let autoRebirth = false;
 let autoPrestige = false;
 let autoBuyAutoClicker = false;
-let autoUpgradeClick = false; // New auto button
+let autoUpgradeClick = false;
 
 const scoreDisplay = document.createElement("div");
 scoreDisplay.style.color = "white";
@@ -76,7 +76,7 @@ function update() {
   drawLeverButton(50, 450, 150, 40, autoRebirth, "Auto Rebirth");
   drawLeverButton(210, 450, 150, 40, autoPrestige, "Auto Prestige");
   drawLeverButton(370, 450, 150, 40, autoBuyAutoClicker, "Auto Buy Auto");
-  drawLeverButton(50, 500, 150, 40, autoUpgradeClick, "Auto Upgrade"); // New button
+  drawLeverButton(50, 500, 150, 40, autoUpgradeClick, "Auto Upgrade");
 
   updateScoreDisplay();
   checkAchievements();
